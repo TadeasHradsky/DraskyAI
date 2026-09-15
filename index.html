@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Drasky AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- Google Fonts: Google Sans Flex & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Zatemňovací vrstva pro mobilní menu -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Boční panel (Sidebar s blur efektem) -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <button id="newChatBtn" class="new-chat-btn">
+                <span class="material-symbols-outlined">add</span>
+                Nový chat
+            </button>
+            <button id="closeSidebar" class="icon-btn mobile-only" aria-label="Zavřít menu">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="sidebar-section">
+            <span class="sidebar-title">Historie chatů</span>
+            <div id="historyList" class="history-list"></div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button id="clearHistoryBtn" class="clear-btn">
+                <span class="material-symbols-outlined">delete_sweep</span>
+                Vymazat vše
+            </button>
+        </div>
+    </aside>
+
+    <!-- Hlavní část rozhraní -->
+    <div class="main-wrapper">
+        <header>
+            <div class="header-left">
+                <button id="openSidebar" class="icon-btn" aria-label="Otevřít menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <span class="logo-text">DRASKY AI</span>
+            </div>
+            <nav class="header-nav">
+                <a href="#">CHAT</a>
+                <a href="#">CALENDAR</a>
+                <a href="#">CODE</a>
+            </nav>
+        </header>
+
+        <main class="chat-container">
+            <!-- Úvodní sekce (Zmizí po odeslání první otázky) -->
+            <div id="welcomeSection" class="welcome-section">
+                <div class="badge">PRO VERZE</div>
+                <h1><span id="pozdrav">Načítám...</span><br>S čím potřebuješ pomoc?</h1>
+            </div>
+
+            <!-- Kontejner pro zprávy -->
+            <div id="chatHistory" class="chat-history"></div>
+        </main>
+
+        <!-- Vstupní lišta s blur efektem -->
+        <div class="input-container">
+            <form id="ollamaForm">
+                <div class="input-wrapper">
+                    <input type="text" id="prompt" placeholder="Zeptej se na cokoliv..." autocomplete="off" required>
+                    <button type="submit" id="odeslat" aria-label="Odeslat dotaz">
+                        <span class="material-symbols-outlined">send</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
