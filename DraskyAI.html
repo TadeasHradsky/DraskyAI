@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>DraskyAI — Aeris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;600&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<style>
+:root{font-family:"Google Sans","Google Sans Text",Arial,sans-serif;color-scheme:light;--bg:#fff;--surface:#f7f7f8;--surface2:#f0f0f2;--text:#252529;--muted:#73737b;--line:rgba(30,30,35,.07);--shadow:0 18px 65px rgba(30,30,35,.08);--accent:#56565b;--accentText:#fff;--user:#f3f3f5;--code:#f3f3f5;--radius:28px}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#131315;--surface:#1d1d20;--surface2:#29292d;--text:#f1f1f3;--muted:#a4a4ad;--line:rgba(255,255,255,.09);--shadow:0 18px 65px rgba(0,0,0,.25);--accent:#e6e6e9;--accentText:#26262a;--user:#252529;--code:#1a1a1d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100dvh;transition:background .25s,color .25s}button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit;border:0} .material-symbols-rounded{font-size:22px;line-height:1;font-variation-settings:'FILL' 0}
+.app{min-height:100dvh}.topbar{position:fixed;z-index:5;top:0;left:0;right:0;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}.topbar>*{pointer-events:auto}.icon-btn{width:56px;height:56px;border-radius:50%;background:var(--surface);display:grid;place-items:center;transition:transform .2s,background .2s;box-shadow:0 6px 25px rgba(0,0,0,.025)}.icon-btn:hover{transform:translateY(-2px);background:var(--surface2)}.brand{display:flex;align-items:center;gap:10px;padding:10px 15px;border-radius:999px;background:var(--surface);font-weight:600;letter-spacing:-.3px}.brand-mark{width:24px;height:24px;border-radius:9px;display:grid;place-items:center;background:var(--text);color:var(--bg);font-size:15px}
+main{max-width:1000px;margin:auto;min-height:100dvh;padding:130px 26px 225px;display:flex;flex-direction:column}.welcome{margin:auto 0;display:flex;align-items:center;flex-direction:column;text-align:center;padding:38px 0 50px;animation:fadeUp .6s ease both}.model-pill{padding:9px 26px;min-width:150px;border-radius:999px;background:var(--surface);box-shadow:0 8px 32px rgba(0,0,0,.025);font-weight:600;font-size:18px;color:var(--text)}.welcome h1{font-size:clamp(34px,6vw,58px);line-height:1.17;letter-spacing:-2px;color:var(--text);margin:48px 0 15px;font-weight:600}.welcome p{color:var(--muted);font-size:16px;margin:0;max-width:460px;line-height:1.6}.chat{width:100%;display:flex;flex-direction:column;gap:28px}.message{display:flex;flex-direction:column;gap:9px;max-width:100%;animation:fadeUp .28s ease both}.message.user{align-self:flex-end;max-width:min(78%,680px)}.message.assistant{align-self:stretch}.message-label{font-size:12px;color:var(--muted);padding:0 4px}.message.user .bubble{align-self:flex-end;background:var(--user);border-radius:23px 23px 7px 23px;padding:16px 20px;white-space:pre-wrap;line-height:1.6}.message.assistant .bubble{line-height:1.75;font-size:16px;overflow-wrap:anywhere}.bubble p{margin:0 0 14px}.bubble p:last-child{margin-bottom:0}.bubble h1,.bubble h2,.bubble h3{letter-spacing:-.6px;line-height:1.3;margin:22px 0 10px}.bubble h1{font-size:1.6em}.bubble h2{font-size:1.35em}.bubble h3{font-size:1.13em}.bubble ul,.bubble ol{padding-left:24px}.bubble li{margin:5px 0}.bubble blockquote{border-left:3px solid var(--surface2);padding-left:14px;color:var(--muted);margin:14px 0}.bubble a{color:inherit;text-decoration:underline;text-underline-offset:3px}.bubble code:not(pre code){background:var(--surface2);padding:2px 6px;border-radius:6px;font-size:.9em}.code-wrap{margin:14px 0 18px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--code)}.code-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);font-size:12px;color:var(--muted)}.copy-code{display:flex;gap:5px;align-items:center;background:transparent;padding:4px 7px;border-radius:8px;font-size:12px}.copy-code:hover{background:var(--surface2)}pre{margin:0;padding:17px;overflow:auto;line-height:1.55;font-size:13px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre code{font-family:inherit}.message-actions{display:flex;gap:4px;opacity:.72}.mini-btn{background:transparent;color:var(--muted);border-radius:9px;padding:7px;display:flex;align-items:center;gap:5px;font-size:12px}.mini-btn:hover{background:var(--surface);color:var(--text)}.typing{display:flex;gap:5px;padding:12px 4px}.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:bounce 1s infinite ease-in-out}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+.composer-area{position:fixed;z-index:4;bottom:0;left:0;right:0;padding:18px 24px max(24px,env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--bg) 72%,transparent);pointer-events:none}.composer{pointer-events:auto;max-width:860px;margin:auto;border:1px solid var(--line);border-radius:34px;background:var(--bg);box-shadow:var(--shadow);padding:19px 20px 15px 26px;transition:border .2s,transform .2s}.composer:focus-within{border-color:color-mix(in srgb,var(--muted) 35%,transparent)}textarea{display:block;width:100%;border:0;outline:0;resize:none;background:transparent;color:var(--text);font-size:17px;line-height:1.5;min-height:52px;max-height:180px;padding:4px 10px 10px 10px}textarea::placeholder{color:var(--muted);font-style:italic}.composer-bottom{display:flex;align-items:center;justify-content:flex-end;gap:10px}.model-select{max-width:190px;border:0;outline:0;appearance:none;background:var(--surface);color:var(--text);padding:12px 37px 12px 16px;border-radius:999px;font-size:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2373737b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}.send-btn{width:58px;height:52px;border-radius:19px;background:var(--accent);color:var(--accentText);display:grid;place-items:center;transition:transform .2s,opacity .2s}.send-btn:hover{transform:translateY(-2px)}.send-btn:disabled{opacity:.45;cursor:default;transform:none}.hint{text-align:center;font-size:11px;color:var(--muted);margin:10px 0 0}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.22);z-index:9;opacity:0;pointer-events:none;transition:opacity .25s}.overlay.open{opacity:1;pointer-events:auto}.sidebar{position:fixed;z-index:10;inset:0 auto 0 0;width:min(330px,88vw);background:var(--bg);padding:24px;transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:22px}.sidebar.open{transform:translateX(0)}.side-head{display:flex;justify-content:space-between;align-items:center}.side-title{font-size:18px;font-weight:600}.side-action{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;background:transparent;text-align:left}.side-action:hover{background:var(--surface)}.side-section{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:0 14px}.side-footer{margin-top:auto;display:flex;flex-direction:column;gap:5px}.status{display:flex;align-items:center;gap:8px;padding:12px 14px;color:var(--muted);font-size:13px}.dot{width:8px;height:8px;border-radius:50%;background:#c8755a}.dot.online{background:#3eaa77}.settings-modal{position:fixed;z-index:12;inset:0;display:none;place-items:center;padding:18px;background:rgba(0,0,0,.28)}.settings-modal.open{display:grid}.settings-card{width:min(480px,100%);background:var(--bg);border-radius:26px;padding:25px;box-shadow:var(--shadow);animation:fadeUp .2s ease}.settings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.settings-head h2{margin:0;font-size:23px;letter-spacing:-.6px}.setting{padding:14px 0;border-top:1px solid var(--line)}.setting label{display:block;font-size:14px;font-weight:500;margin-bottom:9px}.setting small{display:block;color:var(--muted);line-height:1.5;margin-top:7px}.setting input,.setting select{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);outline:0;background:var(--surface);color:var(--text)}.setting select{appearance:auto}.theme-options{display:flex;gap:9px}.theme-option{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:13px;background:var(--surface);border:1px solid transparent}.theme-option.active{border-color:var(--muted)}.primary-btn{background:var(--accent);color:var(--accentText);padding:12px 18px;border-radius:13px;font-weight:500}.settings-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.toast{position:fixed;z-index:20;bottom:125px;left:50%;transform:translate(-50%,10px);background:var(--text);color:var(--bg);padding:11px 16px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}.empty-hidden{display:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.55}30%{transform:translateY(-5px);opacity:1}}
+
+/* DraskyAI visual upgrade */
+.model-picker{position:relative}.model-trigger{display:flex;align-items:center;gap:9px;min-width:158px;justify-content:space-between;border-radius:999px;background:var(--surface);padding:11px 14px;font-size:14px;color:var(--text)}.model-trigger .model-meta{display:flex;align-items:center;gap:8px}.model-orb{width:27px;height:27px;border-radius:10px;background:var(--surface2);display:grid;place-items:center}.model-trigger strong{font-weight:600}.model-trigger small{display:block;color:var(--muted);font-size:10px;margin-top:1px}.model-popover{position:absolute;right:0;bottom:calc(100% + 13px);width:min(320px,calc(100vw - 28px));padding:8px;background:var(--bg);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);display:none;z-index:15;animation:fadeUp .16s ease}.model-popover.open{display:block}.model-choice{width:100%;display:flex;align-items:flex-start;gap:12px;text-align:left;padding:13px;border-radius:15px;background:transparent}.model-choice:hover,.model-choice.active{background:var(--surface)}.model-choice .model-orb{width:38px;height:38px;border-radius:13px;flex-shrink:0}.model-choice strong{display:block;font-size:14px}.model-choice small{display:block;color:var(--muted);font-size:12px;line-height:1.45;margin-top:4px}.model-choice .check{margin-left:auto;color:var(--muted)}.side-head .brand{background:transparent;padding:0;font-size:20px;letter-spacing:.4px}.side-head .brand-mark{display:none}.sidebar{width:min(390px,88vw);padding:28px 24px 22px;gap:18px}.side-head{padding:0 0 20px;border-bottom:1px solid var(--line)}.side-action{width:100%;font-weight:600;justify-content:flex-start}.side-action.primary-side{justify-content:center;background:var(--accent);color:var(--accentText);padding:15px;border-radius:17px}.side-action.app-side{justify-content:center;background:var(--surface);padding:17px;border-radius:17px;margin-bottom:8px}.side-action.app-side:hover{background:var(--surface2)}.side-section{font-size:13px;letter-spacing:0;font-weight:700;color:var(--muted);padding:5px 0 2px}.recent-list{display:flex;flex-direction:column;gap:3px;max-height:34vh;overflow:auto}.recent-item{display:flex;align-items:center;gap:8px;border-radius:12px;padding:5px 7px 5px 0}.recent-open{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;background:transparent;padding:9px 0 9px 0;color:var(--muted);font-weight:400}.recent-delete{background:transparent;color:var(--muted);padding:7px;border-radius:8px;opacity:.8}.recent-delete:hover{background:var(--surface2)}.sidebar .side-footer{padding-top:12px;border-top:1px solid var(--line)}.bubble img,.remote-image{display:block;max-width:100%;height:auto;max-height:520px;object-fit:contain;border-radius:16px;margin:12px 0;border:1px solid var(--line)}.image-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}.image-card{min-width:0;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:var(--surface)}.image-card img{width:100%;height:150px;object-fit:cover;display:block;margin:0;border:0;border-radius:0}.image-card a{display:block;padding:9px 11px;font-size:12px;color:var(--muted);text-decoration:none;overflow-wrap:anywhere}.image-card a:hover{color:var(--text)}.bubble table{width:100%;border-collapse:collapse;display:block;overflow:auto;margin:14px 0;font-size:.92em}.bubble th,.bubble td{border:1px solid var(--line);padding:9px 12px;text-align:left}.bubble th{background:var(--surface);font-weight:600}.bubble hr{border:0;border-top:1px solid var(--line);margin:22px 0}.bubble strong{font-weight:700}.bubble img{cursor:zoom-in}.app-view{display:none}.app-view.open{display:block}.calendar-shell,.code-shell{background:var(--surface);border-radius:20px;padding:18px;margin:8px 0 20px}.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.calendar-grid span{display:grid;place-items:center;min-height:34px;border-radius:10px;font-size:13px}.calendar-grid .day-name{color:var(--muted);font-size:11px}.calendar-grid .today{background:var(--accent);color:var(--accentText)}
+
+@media(max-width:600px){.topbar{padding:16px}.icon-btn{width:49px;height:49px}.brand{font-size:14px}.brand-mark{width:22px;height:22px}main{padding:100px 19px 220px}.welcome{padding:25px 0 35px}.welcome h1{letter-spacing:-1.2px;margin-top:35px}.welcome p{font-size:14px}.composer-area{padding:12px 12px max(14px,env(safe-area-inset-bottom))}.composer{border-radius:27px;padding:14px 13px 12px 17px}textarea{font-size:16px;min-height:48px}.model-select{font-size:12px;max-width:165px;padding:11px 32px 11px 12px}.send-btn{width:49px;height:46px;border-radius:16px}.message.user{max-width:90%}.message.assistant .bubble{font-size:15px}.hint{font-size:10px}.model-pill{font-size:16px}.bubble pre{font-size:12px;padding:13px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Otevřít menu"><span class="material-symbols-rounded">menu</span></button>
+  <div class="brand"><span class="brand-mark">✦</span> DraskyAI</div>
+  <button class="icon-btn" id="newChatBtn" aria-label="Nový chat" title="Nový chat"><span class="material-symbols-rounded">add</span></button>
+</header>
+<main>
+  <section class="welcome" id="welcome">
+    <div class="model-pill">Aeris</div>
+    <h1>Co potřebuješ<br>Drasky?</h1>
+    <p>Jsem Aeris, tvoje AI v DraskyAI. Můžeme společně tvořit, programovat nebo vyřešit jakýkoliv nápad.</p>
+  </section>
+  <section class="chat" id="chat" aria-live="polite"></section>
+  <section id="calendarView" class="app-view" aria-label="Kalendář"><div class="calendar-shell"><div class="calendar-head"><button class="mini-btn" id="prevMonth"><span class="material-symbols-rounded">chevron_left</span></button><strong id="monthLabel"></strong><button class="mini-btn" id="nextMonth"><span class="material-symbols-rounded">chevron_right</span></button></div><div class="calendar-grid" id="calendarGrid"></div><p style="color:var(--muted);font-size:12px;margin:14px 0 0">Jednoduchý lokální kalendář. Události zatím nejsou synchronizované.</p></div></section>
+  <section id="codeView" class="app-view" aria-label="Kód"><div class="code-shell"><h2 style="margin-top:0">✦ Kód s Aeris</h2><p style="color:var(--muted);line-height:1.6">Napiš do chatu, co chceš naprogramovat. Aeris může připravit HTML, CSS, JavaScript nebo jiný kód a zobrazí ho ve formátovaném bloku s tlačítkem pro kopírování.</p><button class="primary-btn" id="startCoding">Začít programovat</button></div></section>
+</main>
+<div class="composer-area">
+  <form class="composer" id="chatForm">
+    <textarea id="prompt" rows="1" placeholder="Napiš, co máš na mysli..." aria-label="Zpráva pro Aeris"></textarea>
+    <div class="composer-bottom">
+      <div class="model-picker">
+        <button type="button" class="model-trigger" id="modelTrigger" aria-expanded="false">
+          <span class="model-meta"><span class="model-orb"><span class="material-symbols-rounded" id="activeModelIcon" style="font-size:18px">bolt</span></span><span><strong id="activeModelName">Aeris Flash</strong><small id="activeModelTag">Rychlý model</small></span></span><span class="material-symbols-rounded">expand_more</span>
+        </button>
+        <div class="model-popover" id="modelPopover">
+          <button class="model-choice active" type="button" data-model="gemma2:2b"><span class="model-orb"><span class="material-symbols-rounded">bolt</span></span><span><strong>Aeris Flash</strong><small>gemma2:2b · rychlé odpovědi, běžné otázky a menší úkoly</small></span><span class="material-symbols-rounded check">check</span></button>
+          <button class="model-choice" type="button" data-model="gemma3:4b"><span class="model-orb"><span class="material-symbols-rounded">auto_awesome</span></span><span><strong>Aeris Pro</strong><small>gemma3:4b · programování, delší texty a složitější zadání</small></span><span class="material-symbols-rounded check" style="visibility:hidden">check</span></button>
+          <div style="padding:8px 13px 10px;color:var(--muted);font-size:11px">Model běží lokálně přes Ollama.</div>
+        </div>
+        <select class="model-select" id="modelSelect" aria-label="Model" style="display:none"><option value="gemma2:2b">Aeris Flash</option><option value="gemma3:4b">Aeris Pro</option></select>
+      </div>
+      <button class="send-btn" id="sendBtn" type="submit" aria-label="Odeslat"><span class="material-symbols-rounded">arrow_upward</span></button>
+    </div>
+  </form>
+  <div class="hint">Aeris běží přes Ollama na tvém zařízení · Odpovědi mohou obsahovat chyby</div>
+</div>
+</div>
+<div class="overlay" id="overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-head"><div class="brand">DRASKY AI</div><button class="icon-btn" id="closeMenu" aria-label="Zavřít menu"><span class="material-symbols-rounded">close</span></button></div>
+  <button class="side-action primary-side" id="sideNew"><span class="material-symbols-rounded">add</span> NOVÝ CHAT</button>
+  <div class="side-section">APLIKACE</div>
+  <button class="side-action app-side" id="openCalendar"><span class="material-symbols-rounded">calendar_month</span> KALENDÁŘ</button>
+  <button class="side-action app-side" id="openCode"><span class="material-symbols-rounded">code</span> KÓD</button>
+  <div class="side-section">NEDÁVNÉ</div>
+  <div class="recent-list" id="recentList"><div style="padding:10px 0;color:var(--muted);font-size:13px">Zatím tu nejsou žádné chaty.</div></div>
+  <div class="side-footer">
+    <button class="side-action app-side" id="openSettings"><span class="material-symbols-rounded">settings</span> NASTAVENÍ</button>
+    <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Ollama: neověřeno</span></div>
+    <button class="side-action" id="checkConnection"><span class="material-symbols-rounded">wifi</span> Ověřit připojení</button>
+  </div>
+</aside>
+<div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="settings-card">
+    <div class="settings-head"><h2 id="settingsTitle">Nastavení</h2><button class="icon-btn" id="closeSettings" aria-label="Zavřít nastavení"><span class="material-symbols-rounded">close</span></button></div>
+    <div class="setting"><label>Motiv vzhledu</label><div class="theme-options"><button class="theme-option" data-theme-choice="light"><span class="material-symbols-rounded">light_mode</span> Světlý</button><button class="theme-option" data-theme-choice="dark"><span class="material-symbols-rounded">dark_mode</span> Tmavý</button><button class="theme-option" data-theme-choice="system"><span class="material-symbols-rounded">contrast</span> Systém</button></div></div>
+    <div class="setting"><label for="ollamaUrl">Ollama adresa</label><input id="ollamaUrl" type="url" value="http://localhost:11434" spellcheck="false"><small>Na stejném počítači nech localhost. Pokud web otevřeš na telefonu, zadej LAN IP adresu počítače, například http://192.168.1.20:11434.</small></div>
+    <div class="setting"><label for="systemPrompt">Instrukce pro Aeris</label><textarea id="systemPrompt" rows="4" style="min-height:95px;border-radius:12px;padding:12px;background:var(--surface);color:var(--text);width:100%;border:1px solid var(--line);resize:vertical">Jsi Aeris, asistent v DraskyAI. Odpovídej česky, pokud uživatel nepíše jiným jazykem. Piš přehledně a užitečně v Markdownu: krátké úvodní shrnutí, logické nadpisy, odrážky, číslované postupy, tabulky jen když pomáhají, tučné zvýraznění a střídmé vhodné emoji/ikonky. U programování používej správné bloky kódu s jazykem, kompletní funkční příklady, vysvětli důležité části a upozorni na předpoklady. Nezkracuj odpovědi, pokud uživatel chce detailní řešení. U obrázků nikdy nevymýšlej URL; pokud jsou k dispozici nalezené obrázky, vlož je pomocí Markdown obrázků nebo galerie. Nevymýšlej si fakta, když si nejsi jistý.</textarea></div>
+    <div class="settings-actions"><button class="primary-btn" id="saveSettings">Uložit nastavení</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const root = document.documentElement;
+  const chat = $('chat'), welcome = $('welcome'), promptBox = $('prompt');
+  let messages = [], busy = false, controller = null, activeChatId = null;
+  let savedChats = [];
+  try { savedChats = JSON.parse(localStorage.getItem('drasky_recent_chats') || '[]'); } catch {}
+  let calendarDate = new Date();
+  let settings = { url: localStorage.getItem('aeris_url') || 'http://localhost:11434', system: localStorage.getItem('aeris_system') || $('systemPrompt').value, theme: localStorage.getItem('aeris_theme') || 'light' };
+  $('ollamaUrl').value = settings.url; $('systemPrompt').value = settings.system;
+  function applyTheme(theme) {
+    settings.theme = theme;
+    const actual = theme === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+    root.dataset.theme = actual;
+    localStorage.setItem('aeris_theme', theme);
+    document.querySelectorAll('[data-theme-choice]').forEach(b => b.classList.toggle('active', b.dataset.themeChoice === theme));
+  }
+  applyTheme(settings.theme);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { if(settings.theme === 'system') applyTheme('system'); });
+  function toast(msg) { const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('show'),2600); }
+  function setSidebar(open) { $('sidebar').classList.toggle('open',open); $('overlay').classList.toggle('open',open); }
+  function newChat() { if(busy && controller) controller.abort(); busy=false; messages=[]; activeChatId=null; chat.innerHTML=''; welcome.classList.remove('empty-hidden'); $('calendarView').classList.remove('open'); $('codeView').classList.remove('open'); chat.classList.remove('empty-hidden'); $('sendBtn').disabled=false; promptBox.value=''; resizeInput(); setSidebar(false); }
+  function resizeInput(){promptBox.style.height='auto';promptBox.style.height=Math.min(promptBox.scrollHeight,180)+'px';}
+  promptBox.addEventListener('input',resizeInput);
+  promptBox.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('chatForm').requestSubmit();}});
+  $('menuBtn').onclick=()=>setSidebar(true); $('closeMenu').onclick=()=>setSidebar(false); $('overlay').onclick=()=>setSidebar(false);
+  $('newChatBtn').onclick=newChat; $('sideNew').onclick=newChat;
+  $('themeToggle').onclick=()=>applyTheme(root.dataset.theme==='dark'?'light':'dark');
+  $('openSettings').onclick=()=>{setSidebar(false);$('settingsModal').classList.add('open');};
+  $('closeSettings').onclick=()=>$('settingsModal').classList.remove('open');
+  $('settingsModal').addEventListener('click',e=>{if(e.target===$('settingsModal'))$('settingsModal').classList.remove('open');});
+  document.querySelectorAll('[data-theme-choice]').forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));
+  $('saveSettings').onclick=()=>{settings.url=$('ollamaUrl').value.trim().replace(/\/+$/,'')||'http://localhost:11434';settings.system=$('systemPrompt').value.trim();localStorage.setItem('aeris_url',settings.url);localStorage.setItem('aeris_system',settings.system);$('settingsModal').classList.remove('open');toast('Nastavení uloženo');checkConnection();};
+  document.querySelectorAll('.choose-model').forEach(b=>b.onclick=()=>{$('modelSelect').value=b.dataset.model;setSidebar(false);toast(b.dataset.model==='gemma2:2b'?'Vybrán Aeris Flash':'Vybrán Aeris Pro');});
+  function saveRecentChat() {
+    if (!messages.length) return;
+    const first = messages.find(m=>m.role==='user'); if(!first) return;
+    if(!activeChatId) activeChatId = String(Date.now());
+    const item={id:activeChatId,title:first.content.slice(0,52)+(first.content.length>52?'…':''),messages:messages.slice(),updated:Date.now()};
+    savedChats=[item,...savedChats.filter(c=>c.id!==activeChatId)].slice(0,15);
+    localStorage.setItem('drasky_recent_chats',JSON.stringify(savedChats)); renderRecentChats();
+  }
+  function renderRecentChats(){
+    const list=$('recentList'); list.innerHTML='';
+    if(!savedChats.length){list.innerHTML='<div style="padding:10px 0;color:var(--muted);font-size:13px">Zatím tu nejsou žádné chaty.</div>';return;}
+    savedChats.forEach(item=>{const row=document.createElement('div');row.className='recent-item';const open=document.createElement('button');open.className='recent-open';open.textContent=item.title;open.title=item.title;open.onclick=()=>loadRecentChat(item.id);const del=document.createElement('button');del.className='recent-delete';del.setAttribute('aria-label','Smazat chat');del.innerHTML='<span class="material-symbols-rounded" style="font-size:20px">delete_outline</span>';del.onclick=()=>{savedChats=savedChats.filter(c=>c.id!==item.id);localStorage.setItem('drasky_recent_chats',JSON.stringify(savedChats));renderRecentChats();};row.append(open,del);list.append(row);});
+  }
+  function loadRecentChat(id){const item=savedChats.find(c=>c.id===id);if(!item)return;if(busy&&controller)controller.abort();busy=false;activeChatId=item.id;messages=item.messages.slice();chat.innerHTML='';welcome.classList.add('empty-hidden');$('calendarView').classList.remove('open');$('codeView').classList.remove('open');chat.classList.remove('empty-hidden');messages.forEach(m=>addMessage(m.role,m.content));setSidebar(false);window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});}
+  renderRecentChats();
+  function setModel(model){$('modelSelect').value=model;const pro=model==='gemma3:4b';$('activeModelName').textContent=pro?'Aeris Pro':'Aeris Flash';$('activeModelTag').textContent=pro?'Pokročilejší model':'Rychlý model';$('activeModelIcon').textContent=pro?'auto_awesome':'bolt';document.querySelectorAll('.model-choice').forEach(b=>{const on=b.dataset.model===model;b.classList.toggle('active',on);b.querySelector('.check').style.visibility=on?'visible':'hidden';});$('modelPopover').classList.remove('open');$('modelTrigger').setAttribute('aria-expanded','false');}
+  $('modelTrigger').onclick=()=>{const open=$('modelPopover').classList.toggle('open');$('modelTrigger').setAttribute('aria-expanded',String(open));};
+  document.querySelectorAll('.model-choice').forEach(b=>b.onclick=()=>setModel(b.dataset.model));
+  document.addEventListener('click',e=>{if(!$('modelPopover').contains(e.target)&&!$('modelTrigger').contains(e.target)){$('modelPopover').classList.remove('open');$('modelTrigger').setAttribute('aria-expanded','false');}});
+  function showApp(view){$('calendarView').classList.toggle('open',view==='calendar');$('codeView').classList.toggle('open',view==='code');chat.classList.toggle('empty-hidden',view!=='');welcome.classList.toggle('empty-hidden',view!=='');setSidebar(false);if(view==='calendar')renderCalendar();}
+  $('openCalendar').onclick=()=>showApp('calendar');$('openCode').onclick=()=>showApp('code');$('startCoding').onclick=()=>{showApp('');promptBox.value='Pomoz mi naprogramovat: ';promptBox.focus();resizeInput();};
+  function renderCalendar(){const y=calendarDate.getFullYear(),m=calendarDate.getMonth();$('monthLabel').textContent=new Intl.DateTimeFormat('cs-CZ',{month:'long',year:'numeric'}).format(calendarDate);const grid=$('calendarGrid');grid.innerHTML='';['Po','Út','St','Čt','Pá','So','Ne'].forEach(d=>{const e=document.createElement('span');e.className='day-name';e.textContent=d;grid.append(e);});const first=(new Date(y,m,1).getDay()+6)%7;const count=new Date(y,m+1,0).getDate();for(let i=0;i<first;i++)grid.append(document.createElement('span'));for(let d=1;d<=count;d++){const e=document.createElement('span');e.textContent=d;if(d===new Date().getDate()&&m===new Date().getMonth()&&y===new Date().getFullYear())e.className='today';grid.append(e);}}
+  $('prevMonth').onclick=()=>{calendarDate.setMonth(calendarDate.getMonth()-1);renderCalendar();};$('nextMonth').onclick=()=>{calendarDate.setMonth(calendarDate.getMonth()+1);renderCalendar();};
+  async function findCommonsImages(query, limit=4){
+    const url='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(query+' filetype:bitmap')+'&gsrnamespace=6&gsrlimit='+limit+'&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=480&format=json&origin=*';
+    const r=await fetch(url);if(!r.ok)throw Error('Vyhledávání obrázků selhalo');const data=await r.json();return Object.values(data.query?.pages||{}).map(p=>({title:p.title.replace(/^File:/,''),url:p.imageinfo?.[0]?.thumburl||p.imageinfo?.[0]?.url,page:p.imageinfo?.[0]?.descriptionurl})).filter(x=>x.url);
+  }
+  function addImageGallery(images, query){if(!images.length)return;const wrap=document.createElement('div');wrap.className='image-gallery';images.forEach(img=>{const card=document.createElement('div');card.className='image-card';const image=document.createElement('img');image.src=img.url;image.alt=img.title;image.loading='lazy';image.referrerPolicy='no-referrer';const link=document.createElement('a');link.href=img.page||img.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=img.title;card.append(image,link);wrap.append(card);});const heading=document.createElement('p');heading.textContent='Obrázky z Wikimedia Commons · '+query;heading.style.cssText='color:var(--muted);font-size:12px;margin:18px 0 0';chat.append(heading,wrap);}
+  function wantsImages(text){return /\b(obrázk\w*|obraz\w*|fotk\w*|fotografi\w*|image\w*|picture\w*|photo\w*|ukaž mi|ukaz mi|najdi mi obráz|najdi obráz)\b/i.test(text);}
+  function safeMarkdown(text) {
+    if(!window.marked) return escapeHtml(text).replace(/\n/g,'<br>');
+    marked.setOptions({gfm:true,breaks:false});
+    const html=marked.parse(text);
+    return window.DOMPurify ? DOMPurify.sanitize(html) : escapeHtml(text).replace(/\n/g,'<br>');
+  }
+  function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function decorateCode(container) {
+    container.querySelectorAll('pre').forEach(pre=>{
+      if(pre.parentElement.classList.contains('code-wrap'))return;
+      const code=pre.querySelector('code'); const lang=(code?.className.match(/language-([\w+-]+)/)||[])[1]||'kód';
+      const wrap=document.createElement('div');wrap.className='code-wrap';
+      const head=document.createElement('div');head.className='code-head';
+      const label=document.createElement('span');label.textContent=lang;
+      const copy=document.createElement('button');copy.className='copy-code';copy.innerHTML='<span class="material-symbols-rounded" style="font-size:16px">content_copy</span> Kopírovat';
+      copy.onclick=async()=>{try{await navigator.clipboard.writeText(code?.innerText||pre.innerText);copy.innerHTML='<span class="material-symbols-rounded" style="font-size:16px">check</span> Zkopírováno';setTimeout(()=>copy.innerHTML='<span class="material-symbols-rounded" style="font-size:16px">content_copy</span> Kopírovat',1500);}catch{toast('Kopírování není v tomto prostředí dostupné');}};
+      head.append(label,copy);pre.parentNode.insertBefore(wrap,pre);wrap.append(head,pre);
+    });
+  }
+  function addMessage(role, text, streaming=false) {
+    const msg=document.createElement('article');msg.className='message '+role;
+    const label=document.createElement('div');label.className='message-label';label.textContent=role==='user'?'Ty':'Aeris';
+    const bubble=document.createElement('div');bubble.className='bubble';
+    if(role==='user') bubble.textContent=text; else bubble.innerHTML=safeMarkdown(text);
+    msg.append(label,bubble);
+    if(role==='assistant'&&!streaming){
+      const actions=document.createElement('div');actions.className='message-actions';
+      const copy=document.createElement('button');copy.className='mini-btn';copy.innerHTML='<span class="material-symbols-rounded" style="font-size:17px">content_copy</span> Kopírovat';
+      copy.onclick=async()=>{try{await navigator.clipboard.writeText(text);toast('Odpověď zkopírována');}catch{toast('Kopírování není dostupné');}};
+      actions.append(copy);msg.append(actions);decorateCode(bubble);
+    }
+    chat.append(msg); return {msg,bubble};
+  }
+  function showTyping(){const el=document.createElement('div');el.className='typing';el.innerHTML='<span></span><span></span><span></span>';chat.append(el);return el;}
+  async function checkConnection(){
+    const dot=$('statusDot'),text=$('statusText');
+    try{const r=await fetch(settings.url+'/api/tags',{signal:AbortSignal.timeout(3500)});if(!r.ok)throw Error();const data=await r.json();dot.classList.add('online');text.textContent='Ollama připojena';const names=(data.models||[]).map(m=>m.name);const missing=['gemma2:2b','gemma3:4b'].filter(n=>!names.some(x=>x===n||x.startsWith(n+':')));if(missing.length)toast('V Ollama chybí: '+missing.join(', '));else toast('Ollama je připravena');}
+    catch{dot.classList.remove('online');text.textContent='Ollama nedostupná';toast('Ollama nejde kontaktovat. Zkontroluj adresu a CORS.');}
+  }
+  $('checkConnection').onclick=()=>{setSidebar(false);checkConnection();};
+  $('chatForm').addEventListener('submit',async e=>{
+    e.preventDefault();const text=promptBox.value.trim();if(!text||busy)return;
+    welcome.classList.add('empty-hidden');addMessage('user',text);messages.push({role:'user',content:text});saveRecentChat();promptBox.value='';resizeInput();busy=true;$('sendBtn').disabled=false;$('sendBtn').innerHTML='<span class="material-symbols-rounded">stop</span>'; 
+    const typing=showTyping();controller=new AbortController();let assistantText='';let target=null;
+    try{
+      const model=$('modelSelect').value;
+      const payload={model,stream:true,messages:[...(settings.system?[{role:'system',content:settings.system}]:[]),...messages]};
+      const response=await fetch(settings.url+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
+      if(!response.ok)throw new Error('Ollama vrátila chybu '+response.status+'. Zkontroluj, zda je model stažený.');
+      typing.remove();target=addMessage('assistant','',true);
+      const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='';
+      while(true){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const lines=buffer.split('\n');buffer=lines.pop()||'';for(const line of lines){if(!line.trim())continue;let chunk;try{chunk=JSON.parse(line)}catch{continue;}if(chunk.message?.content){assistantText+=chunk.message.content;target.bubble.innerHTML=safeMarkdown(assistantText);chat.scrollTop=chat.scrollHeight;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});}if(chunk.error)throw new Error(chunk.error);}}
+      if(!assistantText)assistantText='Model nevrátil žádný text.';
+      target.msg.remove();addMessage('assistant',assistantText);messages.push({role:'assistant',content:assistantText});saveRecentChat();
+      if(wantsImages(text)){try{const q=text.replace(/^(prosím\s*)?(ukaž mi|ukaz mi|najdi mi|najdi|ukaž|ukaz|show me|find)\s*/i,'').replace(/\b(obrázky|obrázek|obrazky|obrazek|fotky|fotku|fotografie|pictures|images|photos)\b/ig,'').trim()||text;const imgs=await findCommonsImages(q,4);addImageGallery(imgs,q);}catch{toast('Obrázky se nepodařilo načíst');}}
+    }catch(err){
+      typing.remove();
+      if(err.name==='AbortError'){if(assistantText){if(target){target.msg.remove();addMessage('assistant',assistantText);messages.push({role:'assistant',content:assistantText});saveRecentChat();}else{addMessage('assistant',assistantText);messages.push({role:'assistant',content:assistantText});saveRecentChat();}}}
+      else{if(target)target.msg.remove();addMessage('assistant','**Nepodařilo se spojit s Ollama.**\n\n'+err.message+'\n\nZkontroluj, že Ollama běží, máš stažený model a povolený přístup z prohlížeče.');}
+    }finally{busy=false;controller=null;$('sendBtn').disabled=false;$('sendBtn').innerHTML='<span class="material-symbols-rounded">arrow_upward</span>';promptBox.focus();}
+  });
+  $('sendBtn').addEventListener('click',e=>{if(busy){e.preventDefault();controller?.abort();}});
+  setModel('gemma2:2b');
+  checkConnection();
+})();
+</script>
+</body>
+</html>
